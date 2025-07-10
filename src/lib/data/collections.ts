@@ -1,6 +1,6 @@
 "use server"
 
-import { sdk } from "@lib/config"
+import { sdk } from "@/lib/config"
 import { HttpTypes } from "@medusajs/types"
 import { getCacheOptions } from "./cookies"
 
@@ -51,7 +51,7 @@ export const getCollectionByHandle = async (
 
   return sdk.client
     .fetch<HttpTypes.StoreCollectionListResponse>(`/store/collections`, {
-      query: { handle, fields: "*products" },
+      query: { handle },
       next,
       cache: "force-cache",
     })
