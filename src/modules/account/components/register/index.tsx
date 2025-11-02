@@ -8,7 +8,8 @@ import { SubmitButton } from "@/modules/checkout/components/submit-button"
 import Input from "@/modules/common/components/input"
 import { HttpTypes } from "@medusajs/types"
 import { Checkbox, Label, Select, Text } from "@medusajs/ui"
-import { ChangeEvent, useActionState, useState } from "react"
+import { ChangeEvent, useActionState, useState, useEffect } from "react"
+import { sdk } from "@/lib/config"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
@@ -62,6 +63,22 @@ const Register = ({ setCurrentView, regions }: Props) => {
   const [message, formAction] = useActionState(signup, null)
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [formData, setFormData] = useState<FormData>(initialFormData)
+  // const [emailValid, setEmailValid] = useState<boolean | null>(null)
+  const [emailError, setEmailError] = useState<string>("")
+  // const [codeSent, setCodeSent] = useState<boolean>(false)
+  // const [codeError, setCodeError] = useState<string>("")
+  // const [submitError, setSubmitError] = useState<string>("")
+
+  // 倒计时状态
+  // const [countdown, setCountdown] = useState<number>(0)
+
+  // useEffect(() => {
+  //   let timer: NodeJS.Timeout
+  //   if (countdown > 0) {
+  //     timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+  //   }
+  //   return () => clearTimeout(timer)
+  // }, [countdown])
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -72,6 +89,80 @@ const Register = ({ setCurrentView, regions }: Props) => {
       [name]: value,
     }))
   }
+
+  // const handleRegister = async (e: React.FormEvent) => {
+  //   e.preventDefault() // 阻止默认表单提交
+  //   if (!isValid) return
+
+  //   try {
+  //     const data = await sdk.client.fetch(`/store/customers/register`, {
+  //       method: "post",
+  //       body: formData,
+  //     })
+  //      console.log('register data:', data)
+  //     // 这里判断接口返回的状态
+  //     if (!data || data.code === 1001 || data.success === false) {
+  //       setCodeError(data?.message || "register failed, please try again later")
+  //       return
+  //     }
+  //     setCurrentView(LOGIN_VIEW.LOG_IN)
+  //   } catch (error) {
+  //     console.log('Registration error:', error)
+  //     const msg =
+  //       error?.message ||
+  //       error?.response?.message ||
+  //       error?.response?.data?.message ||
+  //       "register failed, please try again later"
+  //     setSubmitError(msg)
+  //   }
+    
+
+    // try {
+    //   const res = await signup(formData) // 手动调用注册接口
+    //   if (res.success) {
+    //     // 注册成功后的逻辑，比如跳转页面或提示
+    //     setCurrentView(LOGIN_VIEW.LOG_IN)
+    //   } else {
+    //     // 注册失败，显示错误信息
+    //     setCodeError(res.message || "register failed, please try again later")
+    //   }
+    // } catch (err) {
+    //   setCodeError("register failed, please try again later")
+    // }
+  // }
+
+  const validateEmail = async (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailValid(false)
+      setEmailError("The email address is not formatted correctly")
+      return
+    } else {
+      setEmailValid(true)
+    }
+  }
+
+  // const sendVerificationCode = async () => {
+  //   if (!emailValid) {
+  //     setCodeError("Please enter a valid email address first")
+  //     return
+  //   }
+
+  //   try {
+  //     sdk.client.fetch(`/store/code`, {
+  //       method: "post",
+  //       body: {
+  //         email: formData.email,
+  //       },
+  //     }).then((data) => {
+  //       console.log(data)
+  //       setCodeSent(true)
+  //       setCountdown(60) // 开始倒计时
+  //     })
+  //   } catch (error) {
+  //     setCodeError("Failed to send verification code, please try again later")
+  //   }
+  // }
 
   const handleSelectChange = (name: keyof FormData) => (value: string) => {
     setFormData((prev) => ({
@@ -283,7 +374,7 @@ const Register = ({ setCurrentView, regions }: Props) => {
       <span className="text-center text-ui-fg-base text-small-regular mt-6">
         Already a member?{" "}
         <button
-          onClick={() => setCurrentView(LOGIN_VIEW.LOG_IN)}
+          // onClick={() => setCurrentView(LOGIN_VIEW.LOG_IN)}
           className="underline"
         >
           Log in

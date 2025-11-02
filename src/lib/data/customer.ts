@@ -121,11 +121,13 @@ export async function signup(_currentState: unknown, formData: FormData) {
 
     await transferCart()
 
-    return {
-      customer: createdCustomer,
-      company: createdCompany,
-      employee: createdEmployee,
-    }
+    console.log("createdCustomer", createdCustomer)
+
+    // return {
+    //   customer: createdCustomer,
+    //   company: createdCompany,
+    //   employee: createdEmployee,
+    // }
   } catch (error: any) {
     console.log("error", error)
     return error.toString()

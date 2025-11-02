@@ -9,13 +9,13 @@ const Hero = () => {
   return (
     <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-neutral-100">
       <Image
-        src="/hero-image.jpg"
+        src="/yuquan-image.jpg"
         alt="Hero background"
         layout="fill"
         quality={100}
         priority
       />
-      <div className="absolute inset-0 z-1 flex flex-col justify-center items-center text-center small:p-32 gap-6">
+      {/* <div className="absolute inset-0 z-1 flex flex-col justify-center items-center text-center small:p-32 gap-6">
         <span>
           <p className="text-neutral-600 text-xs uppercase">
             Be light on your feet
@@ -40,8 +40,8 @@ const Hero = () => {
             <Github />
             Github Repository
           </Button>
-        </a>
-      </div>
+        </a> */}
+      {/* </div> */}
     </div>
   )
 }

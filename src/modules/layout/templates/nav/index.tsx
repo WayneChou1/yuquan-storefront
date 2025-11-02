@@ -27,8 +27,8 @@ export async function NavigationHeader() {
               href="/"
             >
               <h1 className="small:text-base text-sm font-medium flex items-center">
-                <LogoIcon className="inline mr-2" />
-                Medusa B2B Starter
+                {/* <LogoIcon className="inline mr-2" /> */}
+                YUQUAN
               </h1>
             </LocalizedClientLink>
 
@@ -43,7 +43,7 @@ export async function NavigationHeader() {
             </nav>
           </div>
           <div className="flex justify-end items-center gap-2">
-            <div className="relative mr-2 hidden small:inline-flex">
+            {/* <div className="relative mr-2 hidden small:inline-flex">
               <input
                 disabled
                 type="text"
@@ -51,7 +51,7 @@ export async function NavigationHeader() {
                 className="bg-gray-100 text-zinc-900 px-4 py-2 rounded-full pr-10 shadow-borders-base hidden small:inline-block hover:cursor-not-allowed"
                 title="Install a search provider to enable product search"
               />
-            </div>
+            </div> */}
 
             <div className="h-4 w-px bg-neutral-300" />
 

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
 }
 
+// 强制动态渲染，因为 layout 需要使用 cookies 来获取用户和购物车信息
+export const dynamic = 'force-dynamic'
+
 export default async function PageLayout(props: { children: React.ReactNode }) {
   const customer = await retrieveCustomer().catch(() => null)
   const cart = await retrieveCart()
@@ -26,7 +29,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
   return (
     <>
       <NavigationHeader />
-      <div className="flex items-center text-neutral-50 justify-center small:p-4 p-2 text-center bg-neutral-900 small:gap-2 gap-1 text-sm">
+      {/* <div className="flex items-center text-neutral-50 justify-center small:p-4 p-2 text-center bg-neutral-900 small:gap-2 gap-1 text-sm">
         <div className="flex flex-col small:flex-row small:gap-2 gap-1 items-center">
           <span className="flex items-center gap-1">
             <ExclamationCircleSolid className="inline" color="#A1A1AA" />
@@ -42,7 +45,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
             <ArrowUpRightMini className="group-hover:text-ui-fg-interactive-hover inline text-ui-fg-interactive" />
           </a>
         </div>
-      </div>
+      </div> */}
 
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />
