@@ -27,3 +27,4 @@ build
 .medusa
 yarn.lock
 .next
+deploy.zip
