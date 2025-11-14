@@ -20,6 +20,7 @@ export const getProductsById = async ({
 
   const next = {
     ...(await getCacheOptions("products")),
+    revalidate: 0,
   }
 
   return sdk.client
@@ -34,7 +35,6 @@ export const getProductsById = async ({
       },
       headers,
       next,
-      cache: "force-cache",
     })
     .then(({ products }) => products)
 }
@@ -46,6 +46,7 @@ export const getProductByHandle = async (handle: string, regionId: string) => {
 
   const next = {
     ...(await getCacheOptions("products")),
+    revalidate: 0,
   }
 
   return sdk.client
@@ -60,7 +61,6 @@ export const getProductByHandle = async (handle: string, regionId: string) => {
       },
       headers,
       next,
-      cache: "force-cache",
     })
     .then(({ products }) => products[0])
 }
@@ -96,6 +96,7 @@ export const listProducts = async ({
 
   const next = {
     ...(await getCacheOptions("products")),
+    revalidate: 0,
   }
 
   return sdk.client
@@ -113,7 +114,6 @@ export const listProducts = async ({
         },
         headers,
         next,
-        cache: "force-cache",
       }
     )
     .then(({ products, count }) => {
