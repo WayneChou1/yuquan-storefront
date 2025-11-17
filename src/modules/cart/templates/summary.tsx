@@ -52,7 +52,7 @@ const Summary = ({ customer, spendLimitExceeded }: SummaryProps) => {
           </p>
         </div>
       )}
-      <LocalizedClientLink
+      {/* <LocalizedClientLink
         href={checkoutButtonLink}
         data-testid="checkout-button"
       >
@@ -66,12 +66,12 @@ const Summary = ({ customer, spendLimitExceeded }: SummaryProps) => {
               : "Checkout"
             : "Log in to Checkout"}
         </Button>
-      </LocalizedClientLink>
+      </LocalizedClientLink> */}
       {!!customer && (
         <RequestQuoteConfirmation>
           <Button
             className="w-full h-10 rounded-full shadow-borders-base"
-            variant="secondary"
+            variant="primary"
             disabled={isPendingApproval}
           >
             Request Quote
@@ -82,7 +82,7 @@ const Summary = ({ customer, spendLimitExceeded }: SummaryProps) => {
         <RequestQuotePrompt>
           <Button
             className="w-full h-10 rounded-full shadow-borders-base"
-            variant="secondary"
+            variant="primary"
             disabled={isPendingApproval}
           >
             Request Quote

@@ -2,7 +2,6 @@
 
 import { useCart } from "@/lib/context/cart-context"
 import { checkSpendingLimit } from "@/lib/util/check-spending-limit"
-import { getCheckoutStep } from "@/lib/util/get-checkout-step"
 import { convertToLocale } from "@/lib/util/money"
 import AppliedPromotions from "@/modules/cart/components/applied-promotions"
 import ApprovalStatusBanner from "@/modules/cart/components/approval-status-banner"
@@ -11,9 +10,12 @@ import Button from "@/modules/common/components/button"
 import LocalizedClientLink from "@/modules/common/components/localized-client-link"
 import ShoppingBag from "@/modules/common/icons/shopping-bag"
 import FreeShippingPriceNudge from "@/modules/shipping/components/free-shipping-price-nudge"
+import { RequestQuoteConfirmation } from "@/modules/quotes/components/request-quote-confirmation"
+import { RequestQuotePrompt } from "@/modules/quotes/components/request-quote-prompt"
 import { B2BCustomer } from "@/types"
+import { ApprovalStatusType } from "@/types/approval"
 import { StoreFreeShippingPrice } from "@/types/shipping-option/http"
-import { ExclamationCircle, LockClosedSolidMini } from "@medusajs/icons"
+import { ExclamationCircle } from "@medusajs/icons"
 import { Drawer, Text } from "@medusajs/ui"
 import { usePathname } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -103,13 +105,6 @@ const CartDrawer = ({
     close()
   }, [pathname])
 
-  const checkoutStep = cart ? getCheckoutStep(cart) : undefined
-  const checkoutPath = customer
-    ? checkoutStep
-      ? `/checkout?step=${checkoutStep}`
-      : "/checkout"
-    : "/account"
-
   return (
     <>
       {isOpen && (
@@ -194,20 +189,34 @@ const CartDrawer = ({
                         View Cart
                       </Button>
                     </LocalizedClientLink>
-                    <LocalizedClientLink href={checkoutPath}>
-                      <Button
-                        className="w-full"
-                        size="large"
-                        disabled={totalItems === 0 || spendLimitExceeded}
-                      >
-                        <LockClosedSolidMini />
-                        {customer
-                          ? spendLimitExceeded
-                            ? "Spending Limit Exceeded"
-                            : "Secure Checkout"
-                          : "Log in to checkout"}
-                      </Button>
-                    </LocalizedClientLink>
+                    {!!customer ? (
+                      <RequestQuoteConfirmation>
+                        <Button
+                          className="w-full"
+                          size="large"
+                          disabled={
+                            totalItems === 0 ||
+                            spendLimitExceeded ||
+                            cart?.approvals?.some(
+                              (approval) =>
+                                approval?.status === ApprovalStatusType.PENDING
+                            )
+                          }
+                        >
+                          Request Quote
+                        </Button>
+                      </RequestQuoteConfirmation>
+                    ) : (
+                      <RequestQuotePrompt>
+                        <Button
+                          className="w-full"
+                          size="large"
+                          disabled={totalItems === 0}
+                        >
+                          Request Quote
+                        </Button>
+                      </RequestQuotePrompt>
+                    )}
                     {spendLimitExceeded && (
                       <div className="flex items-center gap-x-2 bg-neutral-100 p-3 rounded-md shadow-borders-base">
                         <ExclamationCircle className="text-orange-500 w-fit overflow-visible" />
