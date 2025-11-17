@@ -69,11 +69,11 @@ const ProductSpecsTab = ({ product }: ProductTabsProps) => {
 }
 
 const ProductSpecificationsTab = ({ product }: ProductTabsProps) => {
-  // 提取星号中的数字用于排序，并去掉星号及其内容用于显示
+  // 提取下划线中的数字用于排序，并去掉下划线及其内容用于显示
   const parseMetadataKey = (key: string) => {
-    const match = key.match(/\*(\d+)\*/)
+    const match = key.match(/_(\d+)_/)
     const order = match ? parseInt(match[1], 10) : Infinity
-    const displayKey = key.replace(/\*\d+\*/g, "")
+    const displayKey = key.replace(/_\d+_/g, "")
     return { order, displayKey, originalKey: key }
   }
 

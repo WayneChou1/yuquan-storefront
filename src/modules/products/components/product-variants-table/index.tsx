@@ -71,6 +71,24 @@ const ProductVariantsTable = ({
     setIsAdding(false)
   }
 
+  // 提取下划线中的数字用于排序，并去掉下划线及其内容用于显示
+  const parseOptionTitle = (title: string) => {
+    const match = title.match(/_(\d+)_/)
+    const order = match ? parseInt(match[1], 10) : Infinity
+    const displayTitle = title.replace(/_\d+_/g, "")
+    return { order, displayTitle }
+  }
+
+  // 处理并排序 options
+  const sortedOptions = product.options
+    ? product.options
+        .map((option) => ({
+          ...option,
+          ...parseOptionTitle(option.title ?? ""),
+        }))
+        .sort((a, b) => a.order - b.order)
+    : []
+
   return (
     <div className="flex flex-col gap-6">
       <div className="overflow-x-auto p-px">
@@ -78,13 +96,13 @@ const ProductVariantsTable = ({
           <Table.Header className="border-t-0">
             <Table.Row className="bg-neutral-100 border-none hover:!bg-neutral-100">
               <Table.HeaderCell className="px-4">SKU</Table.HeaderCell>
-              {product.options?.map((option) => {
+              {sortedOptions.map((option) => {
                 if (option.title === "Default option") {
                   return null
                 }
                 return (
                   <Table.HeaderCell key={option.id} className="px-4 border-x">
-                    {option.title}
+                    {option.displayTitle}
                   </Table.HeaderCell>
                 )
               })}

@@ -48,6 +48,24 @@ const MobileActions: React.FC<MobileActionsProps> = ({
     return variantPrice || cheapestPrice || null
   }, [price])
 
+  // 提取下划线中的数字用于排序，并去掉下划线及其内容用于显示
+  const parseOptionTitle = (title: string) => {
+    const match = title.match(/_(\d+)_/)
+    const order = match ? parseInt(match[1], 10) : Infinity
+    const displayTitle = title.replace(/_\d+_/g, "")
+    return { order, displayTitle }
+  }
+
+  // 处理并排序 options
+  const sortedOptions = product.options
+    ? product.options
+        .map((option) => ({
+          ...option,
+          ...parseOptionTitle(option.title ?? ""),
+        }))
+        .sort((a, b) => a.order - b.order)
+    : []
+
   return (
     <>
       <div
@@ -168,14 +186,14 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                   <div className="bg-white px-6 py-12">
                     {(product.variants?.length ?? 0) > 1 && (
                       <div className="flex flex-col gap-y-6">
-                        {(product.options || []).map((option) => {
+                        {sortedOptions.map((option) => {
                           return (
                             <div key={option.id}>
                               <OptionSelect
                                 option={option}
                                 current={options[option.title ?? ""]}
                                 updateOption={updateOptions}
-                                title={option.title ?? ""}
+                                title={option.displayTitle}
                                 disabled={optionsDisabled}
                               />
                             </div>
