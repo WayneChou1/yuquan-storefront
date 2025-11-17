@@ -23,7 +23,11 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
 
   return (
     <div className="w-full">
-      <Accordion type="multiple" className="flex flex-col gap-y-2">
+      <Accordion 
+        type="multiple" 
+        className="flex flex-col gap-y-2"
+        defaultValue={["Description", "Specifications"]}
+      >
         {tabs.map((tab, i) => (
           <Accordion.Item
             className="bg-neutral-100 small:px-24 px-6"
@@ -65,6 +69,24 @@ const ProductSpecsTab = ({ product }: ProductTabsProps) => {
 }
 
 const ProductSpecificationsTab = ({ product }: ProductTabsProps) => {
+  // 提取星号中的数字用于排序，并去掉星号及其内容用于显示
+  const parseMetadataKey = (key: string) => {
+    const match = key.match(/\*(\d+)\*/)
+    const order = match ? parseInt(match[1], 10) : Infinity
+    const displayKey = key.replace(/\*\d+\*/g, "")
+    return { order, displayKey, originalKey: key }
+  }
+
+  // 处理并排序 metadata
+  const sortedMetadata = product.metadata
+    ? Object.entries(product.metadata)
+        .map(([key, value]) => ({
+          ...parseMetadataKey(key),
+          value,
+        }))
+        .sort((a, b) => a.order - b.order)
+    : []
+
   return (
     <div className="text-small-regular py-8">
       <Table className="rounded-lg shadow-borders-base overflow-hidden border-none">
@@ -88,17 +110,16 @@ const ProductSpecificationsTab = ({ product }: ProductTabsProps) => {
             </Table.Row>
           )}
 
-          {product.metadata &&
-            Object.entries(product.metadata).map(([key, value]) => (
-              <Table.Row key={key}>
-                <Table.Cell className="border-r">
-                  <span className="font-semibold">{key}</span>
-                </Table.Cell>
-                <Table.Cell className="px-4">
-                  <p>{value as string}</p>
-                </Table.Cell>
-              </Table.Row>
-            ))}
+          {sortedMetadata.map(({ displayKey, value, originalKey }) => (
+            <Table.Row key={originalKey}>
+              <Table.Cell className="border-r">
+                <span className="font-semibold">{displayKey}</span>
+              </Table.Cell>
+              <Table.Cell className="px-4">
+                <p>{value as string}</p>
+              </Table.Cell>
+            </Table.Row>
+          ))}
         </Table.Body>
       </Table>
     </div>
